@@ -15,7 +15,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var tableView: UITableView!
     
     let refreshControl = UIRefreshControl()
-    var postsArray: [Post] =  []
+    static var postsArray: [Post] =  []
     
     @IBAction func logoutButton(_ sender: Any) {
         NotificationCenter.default.post(name: NSNotification.Name("didLogout"), object: nil)
@@ -29,7 +29,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 400
         
-        // Magic code to fix headers
         let dummyViewHeight = CGFloat(40)
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: dummyViewHeight))
         tableView.contentInset = UIEdgeInsetsMake(-dummyViewHeight, 0, 0, 0)
@@ -52,15 +51,14 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     func performQuery(){
         let query = PFQuery(className: "Post")
         query.addDescendingOrder("createdAt")
-        //query.whereKey("author", equalTo: PFUser.current() as Any)
         query.limit = 20
         
         MBProgressHUD.showAdded(to: self.view, animated: true)
         query.findObjectsInBackground { (posts: [PFObject]?, error: Error?) -> Void in
             MBProgressHUD.hide(for: self.view, animated: true)
             if posts != nil {
-                self.postsArray = posts as! [Post]
-                print(self.postsArray)
+                HomeViewController.postsArray = posts as! [Post]
+                print(HomeViewController.postsArray)
             } else {
                 print(error?.localizedDescription as Any)
             }
@@ -74,13 +72,13 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return postsArray.count
+        return HomeViewController.postsArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "HomeTableViewCell", for: indexPath) as! HomeTableViewCell
         //cell.postForCell = HomeViewController.postsArray[indexPath.row]
-        cell.post = postsArray[indexPath.section]
+        cell.post = HomeViewController.postsArray[indexPath.section]
 
         //cell.postCaptionLabel.text = postsArray["caption"] as! String
         //cell.postImageView.file = postsArray["media"] as! PFFile
@@ -108,7 +106,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         profileNameView.adjustsFontSizeToFitWidth = true
         profileNameView.font = UIFont(name:"HelveticaNeue-Bold", size: 16.0)
         
-        let post = postsArray[section]
+        let post = HomeViewController.postsArray[section]
 
         let query = PFUser.query()
         

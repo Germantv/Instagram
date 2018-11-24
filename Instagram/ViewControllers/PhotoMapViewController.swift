@@ -12,10 +12,11 @@ import MBProgressHUD
 
 class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    var window: UIWindow?
+    
     @IBOutlet weak var captionField: UITextField!
     @IBOutlet weak var uploadImageView: UIImageView!
     
-    var window: UIWindow?
     var postImage: UIImage! = nil
     
     override func viewDidLoad() {
@@ -44,11 +45,11 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         postImage = nil
     }
     
-    @IBAction func grabImage(_ sender: Any) {
+    @IBAction func uploadImage(_ sender: Any) {
         print("loading images")
         createImagePicker()
     }
-    
+
     @IBAction func cancelPost(_ sender: Any) {
         clear()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -57,7 +58,7 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
     
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [String : Any]) {
-        let originalImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+        _ = info[UIImagePickerControllerOriginalImage] as! UIImage
         let editedImage = info[UIImagePickerControllerEditedImage] as! UIImage
         self.postImage = editedImage
         

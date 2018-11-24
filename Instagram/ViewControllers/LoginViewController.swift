@@ -61,6 +61,7 @@ class LoginViewController: UIViewController {
                 self.performSegue(withIdentifier: "loginSegue", sender: nil)
             }
         }
+
     }
     
     @IBAction func onSignUp(_ sender: Any) {
@@ -85,10 +86,8 @@ class LoginViewController: UIViewController {
     func emptyFieldAlert() {
         if((usernameField.text?.isEmpty)! || (passwordField.text?.isEmpty)!){
             let alertController = UIAlertController(title: "Username and Password required", message: "Please enter a username or password", preferredStyle: .alert)
-            
-            //create OK button action for the alert controller
+
             let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) in
-                //left blank because nothing else to handle for response
             })
             alertController.addAction(okAction)
         }
